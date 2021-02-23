@@ -229,4 +229,10 @@ return [
 
     ],
 
+    /**
+     * CUSTOM KEYS
+     */
+
+     'giphy_key' => env('GIPHY_KEY')
+
 ];
