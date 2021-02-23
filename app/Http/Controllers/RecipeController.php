@@ -15,13 +15,16 @@ class RecipeController extends Controller {
     public function list (Request $req) {
         $validator = Validator::make($req->all(), [
             'i' => 'required|string|min:1',
-            'p' => 'integer' // Pode estar ausente, mas se informado deve ser numérico
+            'p' => 'integer|min:1' // Pode estar ausente, mas se informado deve ser numérico
+        ], [
+            'min' => ':attribute must be greater than or equal to :min',
+            'required' => 'You must inform :attribute',
         ]);
 
         // Valida se os ingredientes foram informados
         if ($validator->fails()) {
             return response()->json([
-                'error' => 'You must inform the ingredients.'
+                'error' => $validator->messages()->first()
             ], 400);
         }
 
