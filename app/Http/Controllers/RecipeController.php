@@ -95,9 +95,29 @@ class RecipeController extends Controller {
                 'title'       => $recipe['title'],
                 'ingredients' => $this->sortIngredients($recipe['ingredients']),
                 'link'        => $recipe['href'],
-                'gif'         => ''
+                'gif'         => $this->findGif($recipe['title'])
             ];
         }
         return $finalResponse;
+    }
+
+    /**
+     * Busca um gif para a receita
+     */
+    private function findGif (string $title) : string {
+        try {
+            $response = Http::get('http://api.giphy.com/v1/gifs/search', [
+                'q'       => $title,
+                'limit'   => 1,
+                'rating'  => 'g', // Better safe than sorry
+                'api_key' => config('app.giphy_key'),
+            ]);
+            $jsonResponse = $response->json();
+            // Utilizado downsizedMedium para evitar que o GIF seja muito pesado
+            $downsizedMedium = $jsonResponse['data'][0]['images']['downsized_medium'];
+            return $downsizedMedium['url'];
+        } catch (Exception $e) {
+            return '';
+        }
     }
 }
