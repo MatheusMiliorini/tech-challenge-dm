@@ -10,6 +10,27 @@ use Illuminate\Support\Facades\Validator;
 class RecipeController extends Controller {
 
     /**
+     * Essa função é apenas auxiliar para criar a lista de ingredientes que irá no front-end
+     * Não encontrei na documentação do Recipe Puppy uma lista de ingredientes, então debuguei as requests do site para chegar nesse resultado
+     */
+    public function getIngredients () {
+        $ingredients = [];
+        for ($i = 1; $i < 21; $i++) {
+            $response = Http::get("http://www.recipepuppy.com/api/?p=$i");
+            $json = $response->json();
+            foreach ($json['results'] as $r) {
+                $_ingredients = explode(', ', $r['ingredients']);
+                foreach ($_ingredients as $ing) {
+                    $ingredients[] = $ing;
+                }
+            }
+        }
+        $uniques = array_values(array_unique($ingredients));
+        sort($uniques);
+        return response($uniques);
+    }
+
+    /**
      * Busca receitas com base nos ingredientes informados
      */
     public function list (Request $req) {

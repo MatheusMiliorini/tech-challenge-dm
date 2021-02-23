@@ -19,3 +19,4 @@ Route::get('/', function () {
 });
 
 Route::get('/recipes', [RecipeController::class, 'list']);
+Route::get('/ingredients', [RecipeController::class, 'getIngredients']);
