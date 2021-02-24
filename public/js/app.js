@@ -1855,9 +1855,10 @@ module.exports = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _ingredients__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ingredients */ "./resources/js/ingredients.js");
+/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _ingredients__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ingredients */ "./resources/js/ingredients.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -1867,7 +1868,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* eslint-disable no-new */
 
 /* eslint-disable no-undef */
-// import './bootstrap'
+
 
 
 new Vue({
@@ -1880,19 +1881,20 @@ new Vue({
       ingredients: [],
       selectedIngredients: [],
       page: 1,
-      recipes: []
+      recipes: [],
+      noRecipesText: 'Search for recipes on the left!'
     };
   },
   methods: {
     fillIngredients: function fillIngredients() {
-      this.ingredients = _ingredients__WEBPACK_IMPORTED_MODULE_2__.default;
+      this.ingredients = _ingredients__WEBPACK_IMPORTED_MODULE_3__.default;
     },
     filterIngredients: function filterIngredients(val, update, abort) {
       var _this = this;
 
       update(function () {
         var needle = val.toLowerCase();
-        _this.ingredients = _ingredients__WEBPACK_IMPORTED_MODULE_2__.default.filter(function (v) {
+        _this.ingredients = _ingredients__WEBPACK_IMPORTED_MODULE_3__.default.filter(function (v) {
           return v.toLowerCase().indexOf(needle) > -1;
         });
       });
@@ -1905,26 +1907,38 @@ new Vue({
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var _yield$axios$get, data, recipes;
+        var _yield$axios$get, recipes, error;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("".concat(window.APP_URL, "/recipes"), {
+                _this2.noRecipesText = 'Searching...';
+                _context.next = 3;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().get("".concat(window.APP_URL, "/recipes"), {
                   params: {
                     i: _this2.selectedIngredients.join(','),
                     p: _this2.page
                   }
                 });
 
-              case 2:
+              case 3:
                 _yield$axios$get = _context.sent;
-                data = _yield$axios$get.data;
-                recipes = data.recipes;
-                _this2.recipes = recipes || [];
-                console.log(_this2.recipes);
+                recipes = _yield$axios$get.recipes;
+                error = _yield$axios$get.error;
+
+                if (error) {
+                  _this2.$q.notify({
+                    message: error,
+                    icon: 'error',
+                    color: 'negative',
+                    closeBtn: 'OK'
+                  });
+                } else {
+                  _this2.recipes = recipes || []; // Muda o texto de nenhuma receita após a primeira busca
+
+                  _this2.noRecipesText = 'No recipes found :( try other ingredients!';
+                }
 
               case 7:
               case "end":
@@ -1935,6 +1949,33 @@ new Vue({
       }))();
     }
   }
+});
+
+/***/ }),
+
+/***/ "./resources/js/bootstrap.js":
+/*!***********************************!*\
+  !*** ./resources/js/bootstrap.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/**
+ * Configura as libs necessárias
+ */
+
+(axios__WEBPACK_IMPORTED_MODULE_0___default().defaults.headers.common["X-Requested-With"]) = 'XMLHttpRequest';
+/**
+ * Garante que todas as requests serão retornadas da mesma forma, mesmo que haja um erro
+ */
+
+axios__WEBPACK_IMPORTED_MODULE_0___default().interceptors.response.use(function (response) {
+  return response.data;
+}, function (error) {
+  return error.response.data;
 });
 
 /***/ }),

@@ -27,6 +27,7 @@
 
         <q-page-container>
           <div class="row q-col-gutter-md q-mt-md q-px-md">
+            <!-- Busca -->
             <div class="col-md-4">
               <q-select
                 filled
@@ -40,9 +41,16 @@
                 hint="Select up to three ingredients!"
                 use-input
                 fill-input
-                clearable
                 @filter="filterIngredients"
                 :debounce="0"
+              ></q-select>
+
+              <q-select
+                filled
+                v-model="page"
+                :options="[1, 2, 3, 4, 5, 6, 7, 8 , 9, 10]"
+                label="Page"
+                class="full-width q-mt-lg"
               ></q-select>
 
               <q-btn
@@ -53,6 +61,37 @@
                 @click="searchRecipes"
                 :title="selectedIngredients.length === 0 ? 'You must select at least one ingredient' : ''"
               ></q-btn>
+            </div>
+
+            <!-- Listagem -->
+            <div class="col-md-8">
+              <q-list v-if="recipes.length > 0">
+                <q-item v-for="(recipe, i) in recipes" :key="i">
+                  <q-card class="recipe-card full-width">
+                    <q-card-section>
+                      <img class="recipe-gif" :src="recipe.gif" height="100px" width="100px" />
+                      <div class="recipe-text-wrapper">
+                        <div class="recipe-title text-grey-10">@{{ recipe.title }}</div>
+                        <div class="recipe-ingredients text-grey-8"><span>Ingredients:</span> @{{ recipe.ingredients.join(', ') }}.</div>
+                        <div class="recipe-btn">
+                          <q-btn
+                            type="a"
+                            :href="recipe.link"
+                            target="_blank"
+                            color="primary"
+                            label="See this recipe online"
+                          >
+                          </q-btn>
+                        </div>
+                      </div>
+                    </q-card-section>
+                  </q-card>
+                </q-item>
+              </q-list>
+              <div v-else class="no-results text-grey-6">
+                <q-icon name="search"></q-icon>
+                <span>@{{ noRecipesText }}</span>
+              </div>
             </div>
           </div>
         </q-page-container>

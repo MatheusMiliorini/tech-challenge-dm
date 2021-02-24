@@ -1,3 +1,53 @@
 header.bg-primary {
   background: #F7B400 !important
 }
+
+.recipe-card .q-card__section {
+  display: flex;
+  /* padding: 0 16px 16px 0; */
+}
+
+.recipe-text-wrapper {
+  width: 100%;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.recipe-text-wrapper div {
+  flex: auto;
+}
+
+.recipe-gif {
+  border-radius: 5px;
+}
+
+.recipe-title {
+  font-weight: bold;
+  font-size: 20px;
+  font-style: italic;
+}
+
+.recipe-ingredients span {
+  font-weight: bold;
+}
+
+.recipe-btn {
+  text-align: right;
+}
+
+.no-results {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.no-results .q-icon {
+  font-size: 100px;
+}
+
+.no-results span {
+  font-size: 22px;
+}
