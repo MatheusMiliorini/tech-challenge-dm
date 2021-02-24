@@ -60,7 +60,7 @@ class RecipeController extends Controller {
             ], 400);
         } catch (Exception $e) {
             return response()->json([
-                'error' => 'An error has occured while fetching the recipes. Please, try again.'
+                'error' => 'An error has occured while fetching the recipes. Please, try again with different ingredients.'
             ], 500);
         }
     }

@@ -4,6 +4,7 @@ namespace App\Classes;
 
 use Illuminate\Support\Facades\Http;
 use App\Classes\Giphy;
+use Exception;
 
 class RecipePuppy {
     /** @var string*/
@@ -45,6 +46,10 @@ class RecipePuppy {
             'i' => implode(',', $this->ingredients),
             'p' => $this->p
         ]);
+
+        // Throw apenas se ocorrer um erro na request
+        $response->throw();
+
         return $response->json();
     }
 
@@ -89,3 +94,4 @@ class RecipePuppy {
 }
 
 class InvalidIngredientsListException extends \Exception {}
+
