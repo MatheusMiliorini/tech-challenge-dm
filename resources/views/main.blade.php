@@ -76,6 +76,25 @@
                 </div>
               </div>
             </div>
+
+            <!-- Dialog com visualização em mobile -->
+            <q-dialog v-if="$q.platform.is.mobile" v-model="recipesDialog">
+              <q-card>
+                <q-card-section class="row items-center q-pb-none">
+                  <q-btn icon="close" flat round dense v-close-popup />
+                </q-card-section>
+
+                <q-separator></q-separator>
+
+                <q-card-section style="max-height: 75vh" class="scroll">
+                  <q-list class="recipe-list" v-if="recipes.length > 0">
+                    <q-item v-for="(recipe, i) in recipes" :key="i">
+                      <recipe :recipe="recipe"></recipe>
+                    </q-item>
+                  </q-list>
+                </q-card-section>
+              </q-card>
+            </q-dialog>
           </q-page-container>
 
         </q-layout>

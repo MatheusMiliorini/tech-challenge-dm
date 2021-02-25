@@ -4,7 +4,6 @@ header.bg-primary {
 
 .recipe-card .q-card__section {
   display: flex;
-  /* padding: 0 16px 16px 0; */
 }
 
 .recipe-text-wrapper {
@@ -55,4 +54,32 @@ header.bg-primary {
 .recipe-list {
   max-height: calc(100vh - 90px);
   overflow-y: auto;
+}
+
+@media (max-width: 1024px) {
+  .recipe-card .q-card__section {
+    flex-direction: column;
+  }
+
+  .recipe-gif {
+    align-self: center;
+  }
+
+  .recipe-text-wrapper {
+    margin-left: inherit;
+    text-align: center;
+  }
+
+  .recipe-text-wrapper div {
+    margin-top: 10px;
+  }
+
+  .recipe-list {
+    max-height: none;
+  }
+
+  .recipe-btn {
+    text-align: inherit;
+  }
+
 }

@@ -22,7 +22,8 @@ new Vue({
       selectedIngredients: [],
       page: 1,
       recipes: [],
-      noRecipesText: 'Search for recipes on the left!'
+      noRecipesText: 'Search for recipes on the left!',
+      recipesDialog: false
     }
   },
   methods: {
@@ -40,6 +41,9 @@ new Vue({
      */
     async searchRecipes () {
       this.noRecipesText = 'Searching...'
+      this.$q.loading.show({
+        message: this.noRecipesText
+      })
 
       const { recipes, error } = await axios.get(`${window.APP_URL}/recipes`, {
         params: {
@@ -47,6 +51,9 @@ new Vue({
           p: this.page
         }
       })
+
+      this.$q.loading.hide()
+
       if (error) {
         this.$q.notify({
           message: error,
@@ -56,8 +63,20 @@ new Vue({
         })
       } else {
         this.recipes = recipes || []
-        // Muda o texto de nenhuma receita após a primeira busca
-        this.noRecipesText = 'No recipes found :( try other ingredients!'
+        if (this.recipes.length === 0) {
+          // Muda o texto de nenhuma receita após a primeira busca
+          this.noRecipesText = 'No recipes found :( try other ingredients!'
+          if (this.$q.platform.is.mobile) {
+            this.$q.notify({
+              message: this.noRecipesText,
+              icon: 'warning',
+              color: 'warning',
+              closeBtn: 'OK'
+            })
+          }
+        } else if (this.$q.platform.is.mobile) {
+          this.recipesDialog = true
+        }
       }
     }
   }

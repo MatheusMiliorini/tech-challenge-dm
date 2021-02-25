@@ -1933,7 +1933,8 @@ new Vue({
       selectedIngredients: [],
       page: 1,
       recipes: [],
-      noRecipesText: 'Search for recipes on the left!'
+      noRecipesText: 'Search for recipes on the left!',
+      recipesDialog: false
     };
   },
   methods: {
@@ -1965,7 +1966,12 @@ new Vue({
             switch (_context.prev = _context.next) {
               case 0:
                 _this2.noRecipesText = 'Searching...';
-                _context.next = 3;
+
+                _this2.$q.loading.show({
+                  message: _this2.noRecipesText
+                });
+
+                _context.next = 4;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default().get("".concat(window.APP_URL, "/recipes"), {
                   params: {
                     i: _this2.selectedIngredients.join(','),
@@ -1973,10 +1979,12 @@ new Vue({
                   }
                 });
 
-              case 3:
+              case 4:
                 _yield$axios$get = _context.sent;
                 recipes = _yield$axios$get.recipes;
                 error = _yield$axios$get.error;
+
+                _this2.$q.loading.hide();
 
                 if (error) {
                   _this2.$q.notify({
@@ -1986,12 +1994,26 @@ new Vue({
                     closeBtn: 'OK'
                   });
                 } else {
-                  _this2.recipes = recipes || []; // Muda o texto de nenhuma receita após a primeira busca
+                  _this2.recipes = recipes || [];
 
-                  _this2.noRecipesText = 'No recipes found :( try other ingredients!';
+                  if (_this2.recipes.length === 0) {
+                    // Muda o texto de nenhuma receita após a primeira busca
+                    _this2.noRecipesText = 'No recipes found :( try other ingredients!';
+
+                    if (_this2.$q.platform.is.mobile) {
+                      _this2.$q.notify({
+                        message: _this2.noRecipesText,
+                        icon: 'warning',
+                        color: 'warning',
+                        closeBtn: 'OK'
+                      });
+                    }
+                  } else if (_this2.$q.platform.is.mobile) {
+                    _this2.recipesDialog = true;
+                  }
                 }
 
-              case 7:
+              case 9:
               case "end":
                 return _context.stop();
             }
