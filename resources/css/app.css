@@ -51,3 +51,8 @@ header.bg-primary {
 .no-results span {
   font-size: 22px;
 }
+
+.recipe-list {
+  max-height: calc(100vh - 90px);
+  overflow-y: auto;
+}

@@ -65,7 +65,7 @@
 
             <!-- Listagem -->
             <div class="col-md-8">
-              <q-list v-if="recipes.length > 0">
+              <q-list class="recipe-list" v-if="recipes.length > 0">
                 <q-item v-for="(recipe, i) in recipes" :key="i">
                   <q-card class="recipe-card full-width">
                     <q-card-section>
