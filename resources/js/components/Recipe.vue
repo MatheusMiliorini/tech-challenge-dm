@@ -3,8 +3,8 @@
     <q-card-section>
       <img class="recipe-gif" :src="recipe.gif" height="100px" width="100px" />
       <div class="recipe-text-wrapper">
-        <div class="recipe-title text-grey-10">@{{ recipe.title }}</div>
-        <div class="recipe-ingredients text-grey-8"><span>Ingredients:</span> @{{ recipe.ingredients.join(', ') }}.</div>
+        <div class="recipe-title text-grey-10">{{ recipe.title }}</div>
+        <div class="recipe-ingredients text-grey-8"><span>Ingredients:</span> {{ recipe.ingredients.join(', ') }}.</div>
         <div class="recipe-btn">
           <q-btn
             type="a"
