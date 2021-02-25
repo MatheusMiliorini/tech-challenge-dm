@@ -103,12 +103,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue@^2.0.0/dist/vue.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/quasar@1.15.4/dist/quasar.umd.modern.min.js"></script>
-
-    {{-- Constantes auxiliares --}}
-    <script>
-      window.APP_URL = '{{ config('app.url') }}'
-    </script>
-
     <script src="/js/app.js"></script>
   </body>
 </html>

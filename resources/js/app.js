@@ -45,7 +45,7 @@ new Vue({
         message: this.noRecipesText
       })
 
-      const { recipes, error } = await axios.get(`${window.APP_URL}/recipes`, {
+      const { recipes, error } = await axios.get('/recipes', {
         params: {
           i: this.selectedIngredients.join(','),
           p: this.page
