@@ -5,8 +5,14 @@ import './bootstrap'
 import axios from 'axios'
 import ingredients from './ingredients'
 
+// Components
+import Recipe from './components/Recipe'
+
 new Vue({
   el: '#app',
+  components: {
+    Recipe
+  },
   created () {
     this.fillIngredients()
   },
