@@ -1,62 +1,76 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+<p align="center"><img src="https://raw.githubusercontent.com/MatheusMiliorini/tech-challenge-dm/master/public/img/logo_delivery_much.png" width="200"></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Delivery Much Tech Challenge - PHP 
 
-## About Laravel
+Este projeto foi realizado visando atender ao desafio ténico para a vaga [Full Stack na Delivery Much](https://boards.greenhouse.io/deliverymuch/jobs/4353203003).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Tecnologias
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- O back-end foi desenvolvido utilizando a última versão da framework PHP [Laravel](https://laravel.com/).
+- O front-end foi desenvolvido em Vue.js, utilizando a framework [Quasar](https://quasar.dev/).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Como iniciar o projeto
 
-## Learning Laravel
+### Build da imagem Docker
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Após clonar o repositório, acesse o diretório Docker e faça build do Dockerfile com o seguinte comando:
+```
+docker build . --tag <delivery>:<1.0>
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```<delivery>``` e ```<1.0>``` são respectivamente o nome da imagem e a versão, podendo ser alterados conforme preferência.
 
-## Laravel Sponsors
+O build da imagem instala tanto o [Composer](https://getcomposer.org/) quanto o [npm](https://www.npmjs.com/), necessários para rodar/desenvolver encima do projeto.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### Iniciando o container
 
-### Premium Partners
+Após o build realizado, utilize o seguinte comando para iniciar o container da aplicação:
+```
+docker run --name delivery -p 8080:80/tcp -v <caminho>:/var/www/html -d delivery:1.0
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/)**
-- **[OP.GG](https://op.gg)**
+Uma breve explicação do comando acima:
+- ```--name delivery``` é o nome que o container terá. Caso omitido, o Docker irá gerar um nome aleatório;
+- ```-p 8080:80/tcp```indica que o container irá mapear a porta 8080 do host para a porta 80 do container;
+- ```-v <caminho>:/var/www/html``` faz um binding de armazenamento entre um caminho no host e um caminho no container. Neste caso, o caminho é o local onde o repositório foi clonado, no meu caso ```C:\Users\milio\Desktop\tech-challenge-dm```, e ```/var/www/html``` é o caminho padrão para os sites do Apache;
+- ```-d```indica para o container rodar em background;
+- E por fim, ```delivery:1.0```é o nome da imagem criada com o comando ```docker build```.
 
-## Contributing
+### Instalando as dependências
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Agora que o container está rodando, basta instalar os pacotes do PHP utilizando Composer. Apenas para rodar o projeto não é necessário instalar os pacotes npm, pois todos os scripts já estão prontos para uso.
 
-## Code of Conduct
+Por comodidade, deixei um script no container que instala todas as dependências, o ```setup.sh```. Para executá-lo, utilizem o seguinte comando:
+```
+docker exec delivery /setup.sh
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Configurando o .env
 
-## Security Vulnerabilities
+Para que o back-end possa buscar os gifs na API do Giphy, será necessário informar a chave da API no arquivo <b>.env</b>. Isso pode ser feito por fora do container, visto que os arquivos então compartilhados entre host <-> container.
+A chave da API deve ser informada em <b>GIPHY_KEY</b>.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Está pronto!
 
-## License
+Agora basta acessar o endereço [http://localhost:8080](http://localhost:8080) para ver o projeto em execução!
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Desenvolver
+
+O projeto utiliza o webpack através do Laravel Mix. Para isso, alguns scrips npm estão disponíveis para o desenvolvimento:
+- ```npm run dev``` faz o bundle dos arquivos em modo desenvolvimento;
+- ```npm run prod``` faz o bundle dos arquivos em modo produção;
+- ```npm run watch``` faz o bundle em tempo real enquanto o desenvolimento ocorre, acelerando o desenvolvimento.
+
+## Rodando testes
+
+- O back-end acompanha testes para o endpoint de receitas, que podem ser vistos em ```tests\Feature\ListRecipesTest.php```;
+- <b>Não indico</b> rodar os testes diretamente através do comando ```.\vendor\bin\phpunit``` <b>dentro</b> do container, pois ao entrar no container utilizando o comando ```docker exec -it delivery bash``` o shell estará usando o usuário root, enquanto que o Apache roda no usuário www-data. Por conta disso, recomendo utilizar o script ```test.sh```;
+- Para executar o script, utilize o seguinte comando <b>fora</b> do container: ```docker exec delivery /test.sh```;
+- O comando acima habilita o shell para o usuário www-data e roda os testes com ele. Logo após a finalização dos testes, remove o acesso shell.
+
+## Observações
+
+- Como a API RecipePuppy não tinha uma lista de ingredientes (não que eu tenha encontrado), acabei fazendo uma forma "alternativa" de buscar esses ingredientes, que é a rota ```/ingredients``` da API. O código está dentro do Controller junto com a listagem de receitas. Adicionei essa lista em um arquivo .js para utilizar no projeto;
+- Como a API é totalmente em inglês, resolvi fazer o front-end em inglês também, para manter a consistência;
+- A API do Giphy aceita um parâmetro de rating do conteúdo. Utilizei o rating para todas as idades, mas mesmo assim ainda vem algumas coisas NSFW dependendo da receita...
+- Fazer UIs bonitas não é meu forte, mas eu tentei ❤
